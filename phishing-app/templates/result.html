@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phishing URL Analysis Result</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            transition: background-color 0.3s ease;
+            text-align: center;
+            color: #fff;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            z-index: 1;
+            padding: 20px;
+        }
+
+        .result-title {
+            font-size: 50px;
+            font-weight: bold;
+            margin-bottom: 30px;
+            color: #fff;
+        }
+
+        .result-message {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .url {
+            font-size: 18px;
+            margin: 10px 0;
+            color: #fff;
+            word-wrap: break-word;
+            max-width: 600px;
+        }
+
+        .icon {
+            font-size: 100px;
+            margin-bottom: 30px;
+        }
+
+        .button-container {
+            margin-top: 30px;
+        }
+
+        .back-button {
+            padding: 15px 30px;
+            font-size: 18px;
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .back-button:hover {
+            background-color: #66BB6A;
+            transform: scale(1.05);
+        }
+
+        /* Styling for phishing results */
+        .phishing {
+            background-color: #F44336;
+            /* Red background for phishing */
+        }
+
+        .phishing .icon {
+            color: #fff;
+        }
+
+        .legitimate {
+            background-color: #4CAF50;
+            /* Green background for legitimate */
+        }
+
+        .legitimate .icon {
+            color: #fff;
+        }
+    </style>
+</head>
+
+<body class="{{ result_class }}">
+    <div class="container">
+        <h1 class="result-title">URL Analysis Result</h1>
+
+        <div class="icon">
+            {% if result == "Phishing" %}
+            <i class="fas fa-times-circle"></i> <!-- Red cross icon for phishing -->
+            {% else %}
+            <i class="fas fa-check-circle"></i> <!-- Green check icon for legitimate -->
+            {% endif %}
+        </div>
+
+        <p class="result-message">
+            The URL you provided is <strong>{{ result }}</strong>!
+        </p>
+
+        <p class="url">{{ url }}</p>
+
+        <div class="button-container">
+            <a href="/" class="back-button">Analyze Another URL</a>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phishing URL Analyzer</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Global styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #000;
+            /* Black background */
+            color: #fff;
+            /* White text */
+        }
+
+        /* Container for the content */
+        .container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90%;
+            max-width: 600px;
+            z-index: 1;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 50px;
+            color: #4CAF50;
+            margin-bottom: 30px;
+            font-weight: bold;
+        }
+
+        /* Form styles */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            font-size: 18px;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        /* Input field styles */
+        .form-group input {
+            width: 100%;
+            padding: 15px;
+            font-size: 16px;
+            border: 2px solid #4CAF50;
+            border-radius: 10px;
+            background-color: #1c1c1c;
+            color: #fff;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus {
+            border-color: #66BB6A;
+            /* Light green color when focused */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Button styles */
+        .form-group button {
+            width: 100%;
+            padding: 15px;
+            font-size: 18px;
+            color: #fff;
+            background-color: #4CAF50;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .form-group button:hover {
+            background-color: #66BB6A;
+            /* Light green hover effect */
+            transform: scale(1.05);
+        }
+
+        /* Checkbox styles */
+        .checkbox-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .checkbox-container input[type="checkbox"] {
+            display: none;
+        }
+
+        .checkbox-container label {
+            font-size: 16px;
+            color: #fff;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            font-weight: normal;
+        }
+
+        .checkbox-custom {
+            width: 20px;
+            height: 20px;
+            border-radius: 5px;
+            border: 2px solid #4CAF50;
+            background-color: #1c1c1c;
+            margin-right: 10px;
+            position: relative;
+            transition: background-color 0.3s ease;
+        }
+
+        .checkbox-container input[type="checkbox"]:checked+.checkbox-custom {
+            background-color: #4CAF50;
+        }
+
+        .checkbox-container input[type="checkbox"]:checked+.checkbox-custom::after {
+            content: '';
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 14px;
+            height: 14px;
+            background-color: #fff;
+            border-radius: 3px;
+        }
+
+        .checkbox-label {
+            font-size: 16px;
+            color: #fff;
+            display: block;
+            margin-top: 10px;
+            text-align: left;
+        }
+
+        /* Custom background animation styles */
+        #particles-js {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Particles background -->
+    <div id="particles-js"></div>
+
+    <div class="container">
+        <h1>Phishing URL Analyzer</h1>
+
+        <form method="POST" action="/analyze">
+            <div class="form-group">
+                <label for="url">Enter URL to Analyze</label>
+                <input type="text" id="url" name="url" required placeholder="https://example.com">
+            </div>
+
+            <div class="form-check">
+                <input type="checkbox" class="form-check-input" id="scrapeCheck" name="scrape" value="true">
+                <label class="form-check-label" for="scrapeCheck">Scrape and Analyze URLs on Webpage</label>
+            </div>
+
+
+            <div class="form-group">
+                <button type="submit">Analyze URL</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Include Particles.js -->
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+
+    <!-- Initialize Particles.js -->
+    <script>
+        particlesJS('particles-js', {
+            particles: {
+                number: {
+                    value: 100,
+                    density: {
+                        enable: true,
+                        value_area: 800
+                    }
+                },
+                color: {
+                    value: '#4CAF50'
+                },
+                shape: {
+                    type: 'circle',
+                    stroke: {
+                        width: 0,
+                        color: '#fff'
+                    },
+                    polygon: {
+                        nb_sides: 5
+                    }
+                },
+                opacity: {
+                    value: 0.5,
+                    random: true,
+                    anim: {
+                        enable: true,
+                        speed: 1,
+                        opacity_min: 0.1,
+                        sync: false
+                    }
+                },
+                size: {
+                    value: 3,
+                    random: true,
+                    anim: {
+                        enable: true,
+                        speed: 5,
+                        size_min: 0.1,
+                        sync: false
+                    }
+                },
+                line_linked: {
+                    enable: true,
+                    distance: 150,
+                    color: '#4CAF50',
+                    opacity: 0.4,
+                    width: 1
+                },
+                move: {
+                    enable: true,
+                    speed: 6,
+                    direction: 'none',
+                    random: true,
+                    straight: false,
+                    out_mode: 'out',
+                    bounce: false,
+                    attract: {
+                        enable: true,
+                        rotateX: 600,
+                        rotateY: 1200
+                    }
+                }
+            },
+            interactivity: {
+                detect_on: 'window',
+                events: {
+                    onhover: {
+                        enable: true,
+                        mode: 'repulse'
+                    },
+                    onclick: {
+                        enable: true,
+                        mode: 'push'
+                    },
+                    resize: true
+                },
+                modes: {
+                    grab: {
+                        distance: 400,
+                        line_linked: {
+                            opacity: 1
+                        }
+                    },
+                    bubble: {
+                        distance: 400,
+                        size: 40,
+                        duration: 2,
+                        opacity: 8,
+                        speed: 3
+                    },
+                    repulse: {
+                        distance: 200
+                    },
+                    push: {
+                        particles_nb: 4
+                    }
+                }
+            },
+            retina_detect: true
+        });
+    </script>
+</body>
+
+</html>
