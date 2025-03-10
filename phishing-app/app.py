@@ -61,6 +61,10 @@ def scrape_and_analyze(url, xgb_model):
 
 # Load the model
 xgb_model = load_xgboost_model()
+# Load the model
+xgb_model = load_xgboost_model()
+print("✅ Model loaded successfully in Flask app!")  # Add this to confirm model loading
+
 
 @app.route('/')
 def index():
@@ -68,28 +72,30 @@ def index():
 
 @app.route('/analyze', methods=['POST'])
 def analyze():
-    url = request.form['url'].strip()
-    
-    # Ensure URL is properly formatted
-    if not url.startswith(('http://', 'https://')):
-        url = 'http://' + url  
+    url = request.form.get('url', '').strip()
 
-    scrape = request.form.get('scrape')  # Will be 'true' if checked
+    if not url:
+        return render_template('index.html', error="Please enter a valid URL")
 
-    if scrape == 'true':
-        results = scrape_and_analyze(url, xgb_model)
-        
-        # Fix the unpacking issue
-        result_class = "phishing" if any(
-            isinstance(val, tuple) and len(val) == 2 and val[0] == "Phishing"
-            for val in results.values()
-        ) else "legitimate"
+    scrape = request.form.get('scrape')
 
-        return render_template('scraping_result.html', results=results, result_class=result_class, url=url)
-    else:
-        result, prob = predict_phishing_xgboost(url, xgb_model)
-        result_class = "phishing" if result == "Phishing" else "legitimate"
-        return render_template('result.html', result=result, result_class=result_class, url=url)
+    try:
+        if scrape == 'true':
+            results = scrape_and_analyze(url, xgb_model)
+            if not results:
+                return render_template('index.html', error="Could not analyze the URL. Try another one.")
+
+            result_class = "phishing" if any(result == "Phishing" for result, _ in results.values()) else "legitimate"
+            return render_template('scraping_result.html', results=results, result_class=result_class, url=url)
+
+        else:
+            result, prob = predict_phishing_xgboost(url, xgb_model)
+            print(f"DEBUG: URL={url}, Prediction={result}, Probability={prob}")  # ADD THIS LINE
+            result_class = "phishing" if result == "Phishing" else "legitimate"
+            return render_template('result.html', result=result, result_class=result_class, url=url)
+
+    except Exception as e:
+        return render_template('index.html', error=f"An error occurred: {str(e)}")
 
 if __name__ == '__main__':
     app.run(debug=True)
